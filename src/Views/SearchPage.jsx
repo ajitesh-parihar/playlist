@@ -1,51 +1,24 @@
 import { useEffect, useState } from "react";
-import { Button, Alert, Row, Container, Col, Card } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { getCover, searchGames } from "../Controllers/igdb";
-import {
-  Navigate,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
 import { GameCard } from "./Components/GameCard";
 
 export const SearchPage = () => {
   const coverUrl = "https://images.igdb.com/igdb/image/upload/t_cover_big/";
 
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const query = searchParams.get("q");
   const [searchInput, setSearchInput] = useState(query);
   const [gameList, setGameList] = useState([]);
   const [searchQuery, setSearchQuery] = useState(query);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const response = await searchGames(query);
-  //     response.map((item) => {
-  //       getCover(item.id).then((data) => {
-  //         setGameList((old) => [
-  //           ...old,
-  //           {
-  //             id: item.id,
-  //             name: item.name,
-  //             summary: item.summary,
-  //             cover: `${coverUrl}${data}`,
-  //           },
-  //         ]);
-  //       });
-  //       // console.log("not over yet");
-  //     });
-  //     // console.log(list);
-  //     // setGameList(list);
-  //   })();
-  // }, []);
-
   useEffect(() => {
     (async () => {
       setGameList([]);
-      const response = await searchGames(searchInput);
-      response.map((item) => {
+      const response = await searchGames(searchQuery);
+      response.forEach((item) => {
         getCover(item.id).then((data) => {
           setGameList((old) => [
             ...old,
@@ -57,14 +30,12 @@ export const SearchPage = () => {
             },
           ]);
         });
-        // console.log("not over yet");
       });
-      // console.log(list);
-      // setGameList(list);
     })();
   }, [searchQuery]);
 
   useEffect(() => {
+    setGameList([]);
     setSearchInput(query);
     setSearchQuery(query);
   }, [query]);
@@ -86,6 +57,7 @@ export const SearchPage = () => {
                 value={searchInput}
                 onKeyUp={(e) => {
                   if (e.key === "Enter") {
+                    if (searchInput === query) return;
                     setSearchQuery(searchInput);
                     navigate(`/search?q=${searchInput}`);
                   }
@@ -96,6 +68,7 @@ export const SearchPage = () => {
           <Col>
             <Button
               onClick={() => {
+                if (searchInput === query) return;
                 setSearchQuery(searchInput);
                 navigate(`/search?q=${searchInput}`);
               }}
@@ -109,19 +82,14 @@ export const SearchPage = () => {
             gameList.map((item) => (
               <GameCard
                 key={item.id}
+                id={item.id}
                 cover={item.cover}
                 name={item.name}
                 summary={item.summary}
               />
             ))}
-          {/* <Card style={{ width: "18rem" }}>
-            <Card.Img variant="top" src={gameList?.at(0)?.cover} />
-            <Card.Body>
-              <Card.Title>{gameList?.at(0)?.name}</Card.Title>
-              <Card.Text>{gameList?.at(0)?.summary}</Card.Text>
-              <Button variant="primary">Go somewhere</Button>
-            </Card.Body>
-          </Card> */}
+          {gameList.length === 0 &&
+            "No results found, please check your search term."}
         </Row>
       </Container>
     </div>

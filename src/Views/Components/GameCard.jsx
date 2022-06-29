@@ -1,7 +1,9 @@
 import { Button, Card, Container, Row } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import "./card.css";
 
-export const GameCard = ({ cover, name, summary }) => {
+export const GameCard = ({ id, cover, name, summary }) => {
+  const navigate = useNavigate();
   return (
     <Card
       className="hover-shadow"
@@ -21,7 +23,11 @@ export const GameCard = ({ cover, name, summary }) => {
         <Card.Title>
           {name.length > 40 ? `${name.slice(0, 40)}...` : name}
         </Card.Title>
-        <Button variant="primary" className="align-self-end">
+        <Button
+          variant="primary"
+          className="align-self-end"
+          onClick={() => navigate(`/game?id=${id}`)}
+        >
           Details
         </Button>
         {/* <Card.Text>{summary?.slice(0, 100)}</Card.Text>
