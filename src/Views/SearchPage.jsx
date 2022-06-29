@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getCover, searchGames } from "../Controllers/igdb";
+import { CardBox } from "./Components/CardBox";
 import { GameCard } from "./Components/GameCard";
 
 export const SearchPage = () => {
-  const coverUrl = "https://images.igdb.com/igdb/image/upload/t_cover_big/";
-
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q");
@@ -18,19 +17,21 @@ export const SearchPage = () => {
     (async () => {
       setGameList([]);
       const response = await searchGames(searchQuery);
-      response.forEach((item) => {
-        getCover(item.id).then((data) => {
-          setGameList((old) => [
-            ...old,
-            {
-              id: item.id,
-              name: item.name,
-              summary: item.summary,
-              cover: `${coverUrl}${data}`,
-            },
-          ]);
-        });
-      });
+      console.log(response);
+      setGameList(response);
+      // response.forEach((item) => {
+      //   getCover(item.id).then((data) => {
+      //     setGameList((old) => [
+      //       ...old,
+      //       {
+      //         id: item.id,
+      //         name: item.name,
+      //         summary: item.summary,
+      //         cover: `${coverUrl}${data}`,
+      //       },
+      //     ]);
+      //   });
+      // });
     })();
   }, [searchQuery]);
 
@@ -78,18 +79,7 @@ export const SearchPage = () => {
           </Col>
         </Row>
         <Row className="align-items-center d-flex">
-          {gameList.length > 0 &&
-            gameList.map((item) => (
-              <GameCard
-                key={item.id}
-                id={item.id}
-                cover={item.cover}
-                name={item.name}
-                summary={item.summary}
-              />
-            ))}
-          {gameList.length === 0 &&
-            "No results found, please check your search term."}
+          <CardBox gameList={gameList} />
         </Row>
       </Container>
     </div>

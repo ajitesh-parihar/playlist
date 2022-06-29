@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import { Homepage } from "./Views/Homepage";
 import { SearchPage } from "./Views/SearchPage";
 import "bootstrap/dist/css/bootstrap.min.css";

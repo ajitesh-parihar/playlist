@@ -104,7 +104,11 @@ export const GamePage = () => {
             </Row>
             <Row>
               <p>{game.summary}</p>
-              <p>{game.storyline}</p>
+              <p>
+                {game.storyline && game.storyline.length > 500
+                  ? `${game.storyline.slice(0, 500)}...`
+                  : game.storyline}
+              </p>
             </Row>
           </Col>
         </Row>
