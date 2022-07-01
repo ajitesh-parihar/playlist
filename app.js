@@ -114,7 +114,7 @@ app.post("/popularGames", async (req, res) => {
     // console.log(result);
   } catch (e) {
     console.log(e);
-    res.json(e.message);
+    res.sendStatus(500);
   }
 });
 
@@ -168,6 +168,8 @@ app.post("/findGames", async (req, res) => {
     // console.log(result);
   } catch (e) {
     console.log(e);
+
+    res.sendStatus(500);
   }
 });
 
@@ -203,6 +205,8 @@ app.post("/getTop", async (req, res) => {
     // console.log(result);
   } catch (e) {
     console.log(e);
+
+    res.sendStatus(500);
   }
 });
 
@@ -238,6 +242,8 @@ app.post("/getUpcoming", async (req, res) => {
     // console.log(result);
   } catch (e) {
     console.log(e);
+
+    res.sendStatus(500);
   }
 });
 
@@ -323,6 +329,8 @@ app.post("/gameDetails", async (req, res) => {
   } catch (e) {
     console.log(e);
     res.send(e);
+
+    res.sendStatus(500);
   }
 });
 
@@ -345,6 +353,8 @@ app.post("/getCover", async (req, res) => {
     res.json(result);
   } catch (e) {
     console.log(e);
+
+    res.sendStatus(500);
   }
 });
 
@@ -368,15 +378,9 @@ app.post("/getArtwork", async (req, res) => {
     res.json(result);
   } catch (e) {
     console.log(e);
+
+    res.sendStatus(500);
   }
-});
-
-app.get("/test", (req, res) => {
-  res.send("Response");
-});
-
-app.post("/please", (req, res) => {
-  res.send("Response");
 });
 
 app.get("*", (req, res) => {
