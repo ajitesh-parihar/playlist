@@ -113,7 +113,7 @@ app.post("/popularGames", async (req, res) => {
     // console.log(result);
   } catch (e) {
     console.log(e);
-    res.json(e);
+    res.json({ ...e, please: "work" });
   }
 });
 
