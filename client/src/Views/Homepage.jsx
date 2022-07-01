@@ -104,7 +104,7 @@ export const Homepage = () => {
         {popular && (
           <Row className="w-100 mb-5">
             <Carousel>
-              {popular.map((game) => (
+              {popular?.map((game) => (
                 <Carousel.Item
                   key={game.id}
                   style={{

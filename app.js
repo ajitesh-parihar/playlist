@@ -113,6 +113,7 @@ app.post("/popularGames", async (req, res) => {
     // console.log(result);
   } catch (e) {
     console.log(e);
+    res.send(e);
   }
 });
 
@@ -320,6 +321,7 @@ app.post("/gameDetails", async (req, res) => {
     // console.log(result);
   } catch (e) {
     console.log(e);
+    res.send(e);
   }
 });
 
