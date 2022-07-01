@@ -1,4 +1,8 @@
-const url = "https://playlist-games.herokuapp.com";
+const url =
+  process.env.NODE_ENV === "production"
+    ? "https://playlist-games.herokuapp.com"
+    : "http://localhost:3000";
+
 export async function popularGames() {
   try {
     const response = await fetch(`${url}/popularGames`, {
@@ -43,7 +47,7 @@ export async function searchGames(query) {
 
 export async function getTop() {
   try {
-    const response = await fetch(`${url}/popularGames/getTop`, {
+    const response = await fetch(`${url}/getTop`, {
       method: "POST",
       headers: new Headers({
         Accept: "application/json",
