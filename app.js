@@ -93,7 +93,7 @@ app.post("/popularGames", async (req, res) => {
     // console.log(req.body.name);
     const response = await fetch(`${url}/games`, {
       method: "POST",
-      headers: new Headers({
+      headers: new fetch.Headers({
         Accept: "application/json",
         // "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
@@ -123,7 +123,7 @@ app.post("/findGames", async (req, res) => {
     // console.log(req.body.name);
     const response = await fetch(`${url}/games`, {
       method: "POST",
-      headers: new Headers({
+      headers: new fetch.Headers({
         Accept: "application/json",
         // "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
@@ -176,7 +176,7 @@ app.post("/getTop", async (req, res) => {
     // console.log(req.body.name);
     const response = await fetch(`${url}/games`, {
       method: "POST",
-      headers: new Headers({
+      headers: new fetch.Headers({
         Accept: "application/json",
         // "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
@@ -211,7 +211,7 @@ app.post("/getUpcoming", async (req, res) => {
     // console.log(req.body.name);
     const response = await fetch(`${url}/games`, {
       method: "POST",
-      headers: new Headers({
+      headers: new fetch.Headers({
         Accept: "application/json",
         // "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
@@ -246,7 +246,7 @@ app.post("/gameDetails", async (req, res) => {
     // console.log(req.body.id);
     const response = await fetch(`${url}/games`, {
       method: "POST",
-      headers: new Headers({
+      headers: new fetch.Headers({
         Accept: "application/json",
         // "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
@@ -331,7 +331,7 @@ app.post("/getCover", async (req, res) => {
     // console.log(req.body.id);
     const response = await fetch(`${url}/covers`, {
       method: "POST",
-      headers: new Headers({
+      headers: new fetch.Headers({
         Accept: "application/json",
         // "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
@@ -353,7 +353,7 @@ app.post("/getArtwork", async (req, res) => {
     // console.log(req.body.id);
     const response = await fetch(`${url}/artworks`, {
       method: "POST",
-      headers: new Headers({
+      headers: new fetch.Headers({
         Accept: "application/json",
         // "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
