@@ -8,8 +8,8 @@ export const GameCard = ({ id, cover, name, summary }) => {
     <Card
       className="hover-shadow"
       style={{
-        width: "20rem",
-        height: "33rem",
+        width: "18rem",
+        height: "29rem",
         backgroundColor: "#00121a",
         margin: "1rem",
         borderRadius: 10,
@@ -17,7 +17,7 @@ export const GameCard = ({ id, cover, name, summary }) => {
       }}
     >
       {cover && (
-        <Card.Img variant="top" src={cover} style={{ height: "25rem" }} />
+        <Card.Img variant="top" src={cover} style={{ height: "21rem" }} />
       )}
       <Card.Body className="d-flex align-items-start flex-row justify-content-between">
         <Card.Title>

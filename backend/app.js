@@ -253,7 +253,9 @@ app.post("/gameDetails", async (req, res) => {
         "Client-ID": process.env.CLIENT_ID,
         "Access-Control-Allow-Origin": "*",
       }),
-      body: `fields name, summary, storyline, first_release_date, involved_companies.company.name, involved_companies.developer, total_rating, themes.name, artworks.url, cover.url, age_ratings.rating, platforms.name;
+      body: `fields name, summary, storyline, first_release_date, involved_companies.company.name,
+      involved_companies.developer, total_rating, themes.name, artworks.url, cover.url,
+      age_ratings.rating, platforms.name, similar_games.name, similar_games.cover.url, similar_games.artworks.url;
       where id = ${req.body.id};`,
     });
     const [result] = await response.json();
@@ -295,7 +297,6 @@ app.post("/gameDetails", async (req, res) => {
         result.platforms[index] = item.name;
       });
     }
-    // console.log(Number(result.age_ratings.at(0)));
     result.age_rating = result.age_ratings
       ? result.age_ratings
           .map((item) => enumAgeRating[Number(item.rating)])
@@ -303,6 +304,20 @@ app.post("/gameDetails", async (req, res) => {
           .join(", ")
       : // enumRating[Number(result.age_ratings.at(0).rating)]
         "unrated";
+    if (result.similar_games) {
+      result.similar_games.forEach((item, index) => {
+        if (item.cover) {
+          result.similar_games[index].cover = `${coverUrl}${item.cover.url
+            .split("/")
+            .pop()}`;
+        } else if (item.artworks) {
+          result.similar_games[index].cover = `${coverUrl}${item.artworks
+            .at(0)
+            .url.split("/")
+            .pop()}`;
+        } else result.similar_games[index].cover = `${coverUrl}nocover.png`;
+      });
+    }
     res.json(result);
     // console.log(result);
   } catch (e) {

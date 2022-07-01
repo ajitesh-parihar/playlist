@@ -2,6 +2,7 @@ import { useEffect, useReducer, useState } from "react";
 import { Button, Carousel, Col, Container, Image, Row } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { gameDetails } from "../Controllers/igdb";
+import { CardBox } from "./Components/CardBox";
 import { Footer } from "./Components/Footer";
 import { Header } from "./Components/Header";
 
@@ -19,6 +20,7 @@ export const GamePage = () => {
   useEffect(() => {
     (async () => {
       const response = await gameDetails(searchQuery);
+      window.scrollTo(0, 0);
       setGame(response);
     })();
   }, [searchQuery]);
@@ -88,7 +90,7 @@ export const GamePage = () => {
             </Carousel>
           )}
         </Row>
-        <Row className="w-100 d-flex justify-content-center">
+        <Row className="w-100 d-flex justify-content-center border-1 border-bottom mb-5">
           <Col className="col-3">
             <Row>
               {game.cover && (
@@ -178,14 +180,20 @@ export const GamePage = () => {
               <p style={{ textAlign: "justify" }} onClick={toggleExpandStory}>
                 {(game.storyline &&
                   !expandStory &&
-                  ((game.storyline.length > 500 &&
-                    `${game.storyline.slice(0, 500)}...`) ||
+                  ((game.storyline.length > 600 &&
+                    `${game.storyline.slice(0, 600)}...`) ||
                     game.storyline)) ||
                   (expandStory && <p>{game.storyline}</p>)}
               </p>
             </Row>
           </Col>
         </Row>
+        {game.similar_games && (
+          <Row>
+            <h3>Similar Games:</h3>
+            <CardBox gameList={game.similar_games} />
+          </Row>
+        )}
       </Container>
       <Footer />
     </div>
