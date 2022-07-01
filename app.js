@@ -372,6 +372,10 @@ app.get("/test", (req, res) => {
   res.send("Response");
 });
 
+app.post("/test", (req, res) => {
+  res.send("Response");
+});
+
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
