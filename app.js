@@ -1,4 +1,4 @@
-require("dotenv").config();
+// require("dotenv").config();
 const path = require("path");
 const express = require("express");
 const bcrypt = require("bcryptjs");
@@ -113,7 +113,12 @@ app.post("/popularGames", async (req, res) => {
     // console.log(result);
   } catch (e) {
     console.log(e);
-    res.json({ ...e, please: "work" });
+    res.json({
+      ...e,
+      please: "work",
+      ac: process.env.ACCESS_TOKEN,
+      c: process.env.CLIENT_ID,
+    });
   }
 });
 
