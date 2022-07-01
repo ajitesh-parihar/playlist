@@ -4,7 +4,7 @@ import { GameCard } from "./GameCard";
 export const CardBox = ({ gameList }) => {
   return (
     <>
-      {gameList.length > 0 &&
+      {gameList?.length > 0 &&
         gameList.map((item) => (
           <GameCard
             key={item.id}
@@ -14,8 +14,11 @@ export const CardBox = ({ gameList }) => {
             summary={item.summary}
           />
         ))}
-      {gameList.length === 0 &&
-        "No results found, please check your search term."}
+      {(gameList?.length === 0 || !gameList) && (
+        <h3 style={{ textAlign: "center", marginTop: "20%" }}>
+          No results found, please check your search term.
+        </h3>
+      )}
     </>
   );
 };

@@ -22,9 +22,9 @@ export async function popularGames() {
   }
 }
 
-export async function searchGames(name) {
+export async function searchGames(query) {
   try {
-    console.log(name);
+    if (!query) return;
     const response = await fetch("http://localhost:3000/findGames", {
       method: "POST",
       headers: new Headers({
@@ -35,7 +35,49 @@ export async function searchGames(name) {
         "Access-Control-Allow-Origin": "*",
       }),
       body: JSON.stringify({
-        name,
+        query,
+      }),
+    });
+    const result = await response.json();
+    console.log(result);
+    return result;
+  } catch (e) {
+    console.log(e);
+    return "error";
+  }
+}
+
+export async function getTop() {
+  try {
+    const response = await fetch("http://localhost:3000/getTop", {
+      method: "POST",
+      headers: new Headers({
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+        "Client-ID": clientID,
+        "Access-Control-Allow-Origin": "*",
+      }),
+    });
+    const result = await response.json();
+    console.log(result);
+    return result;
+  } catch (e) {
+    console.log(e);
+    return "error";
+  }
+}
+
+export async function getUpcoming() {
+  try {
+    const response = await fetch("http://localhost:3000/getUpcoming", {
+      method: "POST",
+      headers: new Headers({
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+        "Client-ID": clientID,
+        "Access-Control-Allow-Origin": "*",
       }),
     });
     const result = await response.json();

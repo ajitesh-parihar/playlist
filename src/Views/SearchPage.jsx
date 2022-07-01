@@ -3,18 +3,23 @@ import { Button, Col, Container, Row } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getCover, searchGames } from "../Controllers/igdb";
 import { CardBox } from "./Components/CardBox";
+import { Footer } from "./Components/Footer";
 import { GameCard } from "./Components/GameCard";
+import { Header } from "./Components/Header";
+import { genres } from "../Helpers/enumerators";
 
 export const SearchPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const query = searchParams.get("q");
-  const [searchInput, setSearchInput] = useState(query);
+  const searchName = searchParams.get("q");
+  const genre = searchParams.get("genre");
+  const [searchQuery, setSearchQuery] = useState();
+  const [searchInput, setSearchInput] = useState("");
   const [gameList, setGameList] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(query);
 
   useEffect(() => {
     (async () => {
+      if (!searchQuery) return;
       setGameList([]);
       const response = await searchGames(searchQuery);
       console.log(response);
@@ -37,13 +42,17 @@ export const SearchPage = () => {
 
   useEffect(() => {
     setGameList([]);
-    setSearchInput(query);
-    setSearchQuery(query);
-  }, [query]);
+    setSearchInput(`${searchName ? searchName : ""}`);
+    setSearchQuery({
+      searchName,
+      genre,
+    });
+  }, [genre, searchName]);
 
   return (
-    <div className="w-100 vh-100">
-      <Container>
+    <div className="d-flex flex-column min-vh-100 w-100">
+      <Header />
+      <Container className="mb-5">
         <Row className="w-100">
           <Col className="col-10">
             <div className="active-cyan-4 mb-4">
@@ -58,9 +67,13 @@ export const SearchPage = () => {
                 value={searchInput}
                 onKeyUp={(e) => {
                   if (e.key === "Enter") {
-                    if (searchInput === query) return;
-                    setSearchQuery(searchInput);
-                    navigate(`/search?q=${searchInput}`);
+                    if (searchInput === searchQuery.searchName) return;
+                    if (searchInput.length === 0) return;
+                    navigate(
+                      `/search?q=${searchInput}&${
+                        searchQuery.genre && `genre=${searchQuery.genre}`
+                      }`
+                    );
                   }
                 }}
               />
@@ -69,19 +82,31 @@ export const SearchPage = () => {
           <Col>
             <Button
               onClick={() => {
-                if (searchInput === query) return;
-                setSearchQuery(searchInput);
-                navigate(`/search?q=${searchInput}`);
+                if (searchInput === searchQuery.searchName) return;
+                if (searchInput.length === 0) return;
+                navigate(
+                  `/search?q=${searchInput}&${
+                    searchQuery.genre && `genre=${searchQuery.genre}`
+                  }`
+                );
               }}
             >
               Search
             </Button>
           </Col>
         </Row>
+        <Row>
+          {searchQuery?.genre && (
+            <h3>{`${
+              genres.find((item) => item.id == searchQuery.genre).name
+            } games:`}</h3>
+          )}
+        </Row>
         <Row className="align-items-center d-flex">
           <CardBox gameList={gameList} />
         </Row>
       </Container>
+      <Footer />
     </div>
   );
 };

@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { Button, Carousel, Col, Container, Image, Row } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { gameDetails } from "../Controllers/igdb";
+import { Footer } from "./Components/Footer";
+import { Header } from "./Components/Header";
 
 export const GamePage = () => {
   const navigate = useNavigate();
@@ -10,6 +12,9 @@ export const GamePage = () => {
   const [searchInput, setSearchInput] = useState("");
   const [game, setGame] = useState([]);
   const [searchQuery, setSearchQuery] = useState(query);
+  const [expandStory, toggleExpandStory] = useReducer((oldState) => {
+    return !oldState;
+  }, false);
 
   useEffect(() => {
     (async () => {
@@ -24,9 +29,10 @@ export const GamePage = () => {
   }, [query]);
 
   return (
-    <div className="w-100 vh-100">
-      <Container>
-        <Row className="w-100">
+    <div className="d-flex flex-column min-vh-100 w-100">
+      <Header />
+      <Container className="mb-5">
+        <Row className="w-100 justify-content-center">
           <Col className="col-10">
             <div className="active-cyan-4 mb-4">
               <input
@@ -40,15 +46,16 @@ export const GamePage = () => {
                 value={searchInput}
                 onKeyUp={(e) => {
                   if (e.key === "Enter") {
-                    if (searchInput === query) return;
-                    setSearchQuery(searchInput);
-                    navigate(`/search?q=${searchInput}`);
+                    if (searchInput.length) {
+                      setSearchQuery(searchInput);
+                      navigate(`/search?q=${searchInput}`);
+                    }
                   }
                 }}
               />
             </div>
           </Col>
-          <Col>
+          <Col className="col-1">
             <Button
               onClick={() => {
                 if (searchInput === query) return;
@@ -62,10 +69,10 @@ export const GamePage = () => {
         </Row>
         <Row>
           {game.artworks && (
-            <Carousel>
-              {game.artworks.map((art) => (
+            <Carousel className="mb-5">
+              {game.artworks.map((art, index) => (
                 <Carousel.Item
-                  key={art}
+                  key={index}
                   style={{
                     height: "20em",
                   }}
@@ -81,38 +88,106 @@ export const GamePage = () => {
             </Carousel>
           )}
         </Row>
-        <Row className="w-100">
-          <Col>
+        <Row className="w-100 d-flex justify-content-center">
+          <Col className="col-3">
             <Row>
-              <Image
-                src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover}`}
-                className="w-50"
-              ></Image>
+              {game.cover && (
+                <Image
+                  src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover}`}
+                  className="w-100"
+                ></Image>
+              )}
             </Row>
-            <Row>{game.themes?.join(", ")}</Row>
             <Row>
-              <p>{`Ratings: ${
-                game.aggregated_rating
-                  ? Number(game.aggregated_rating).toFixed(0) + "%"
-                  : "No ratings found"
-              }`}</p>
+              {game.first_release_date && (
+                <div className="mt-2">
+                  <h6>
+                    <b>Release Date:</b>
+                    {game.first_release_date}
+                  </h6>
+                </div>
+              )}
+              {!!game.developers?.length && (
+                <div className="mt-2">
+                  <h6>
+                    <b>Developed by:</b>
+                  </h6>
+                  <p>{game.developers && game.developers.join(", ")}</p>
+                </div>
+              )}
+              {!!game.publishers?.length && (
+                <div className="mt-2">
+                  <h6>
+                    <b>Published by:</b>
+                  </h6>
+                  <p>{game.publishers && game.publishers.join(", ")}</p>
+                </div>
+              )}
             </Row>
           </Col>
           <Col>
             <Row>
-              <h1>{game.name}</h1>
+              <div className="d-flex justify-content-between align-items-end mb-2">
+                <div
+                  className="d-flex justify-content-evenly flex-column"
+                  style={{ maxWidth: "75%" }}
+                >
+                  <h1>{game.name}</h1>
+                  <div className="mb-3">
+                    {game.themes?.map((item, index) => (
+                      <Button
+                        className="me-2"
+                        size="sm"
+                        variant="outline-info"
+                        key={index}
+                      >
+                        {item}
+                      </Button>
+                    ))}
+                  </div>
+                  <p>{`Platforms: ${game.platforms?.join(", ")}`}</p>
+                </div>
+                <div className="h-100 d-flex flex-column justify-content-between py-2">
+                  <h3>
+                    <b>Ratings: </b>
+                    <span
+                      style={{
+                        color: `hsl(${Number(game.total_rating).toFixed(
+                          0
+                        )}, 100%, 30%)`,
+                      }}
+                    >
+                      {`${
+                        game.total_rating
+                          ? Number(game.total_rating).toFixed(0) + "%"
+                          : "N/A"
+                      }`}
+                    </span>
+                  </h3>
+                  <div>
+                    <h6>
+                      <b>Parental guidance:</b>
+                    </h6>
+                    <h6>{game.age_rating}</h6>
+                  </div>
+                </div>
+              </div>
             </Row>
-            <Row>
-              <p>{game.summary}</p>
-              <p>
-                {game.storyline && game.storyline.length > 500
-                  ? `${game.storyline.slice(0, 500)}...`
-                  : game.storyline}
+            <Row className="pt-5 border-top border-1">
+              <p style={{ textAlign: "justify" }}>{game.summary}</p>
+              <p style={{ textAlign: "justify" }} onClick={toggleExpandStory}>
+                {(game.storyline &&
+                  !expandStory &&
+                  ((game.storyline.length > 500 &&
+                    `${game.storyline.slice(0, 500)}...`) ||
+                    game.storyline)) ||
+                  (expandStory && <p>{game.storyline}</p>)}
               </p>
             </Row>
           </Col>
         </Row>
       </Container>
+      <Footer />
     </div>
   );
 };
