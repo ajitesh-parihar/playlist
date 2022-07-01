@@ -372,7 +372,7 @@ app.get("/test", (req, res) => {
   res.send("Response");
 });
 
-app.post("/test", (req, res) => {
+app.post("/please", (req, res) => {
   res.send("Response");
 });
 
