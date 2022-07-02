@@ -1,4 +1,4 @@
-// require("dotenv").config();
+require("dotenv").config();
 const fetch = require("node-fetch");
 const path = require("path");
 const express = require("express");
@@ -142,17 +142,6 @@ app.post("/findGames", async (req, res) => {
       } & version_parent = null & summary != null & category = (0,2,4);
       `,
     });
-    console.log(`fields name, cover.url, artworks.url, aggregated_rating;
-    limit 100;
-    ${
-      req.body.query.searchName
-        ? `search \"${req.body.query.searchName}\";`
-        : "sort aggregated_rating desc;"
-    }
-    where genres ${
-      req.body.query.genre ? `= [${req.body.query.genre}]` : "!= null"
-    } & version_parent = null & summary != null & category = (0,2,4);
-    `);
     const result = await response.json();
     result.forEach((item, index) => {
       if (item.cover) {
@@ -265,7 +254,6 @@ app.post("/gameDetails", async (req, res) => {
         where id = ${req.body.id};`,
     });
     const [result] = await response.json();
-    console.log(result);
     if (result.themes) {
       result.themes.forEach(
         (item, index) => (result.themes[index] = item.name)
@@ -328,8 +316,6 @@ app.post("/gameDetails", async (req, res) => {
     // console.log(result);
   } catch (e) {
     console.log(e);
-    res.send(e);
-
     res.sendStatus(500);
   }
 });
@@ -353,7 +339,6 @@ app.post("/getCover", async (req, res) => {
     res.json(result);
   } catch (e) {
     console.log(e);
-
     res.sendStatus(500);
   }
 });
@@ -373,12 +358,11 @@ app.post("/getArtwork", async (req, res) => {
       body: `fields url;
       where id = ${req.body.id};`,
     });
-    console.log(response.urlList);
+    // console.log(response.urlList);
     const result = await response.json();
     res.json(result);
   } catch (e) {
     console.log(e);
-
     res.sendStatus(500);
   }
 });

@@ -14,11 +14,11 @@ export async function popularGames() {
       }),
     });
     const result = await response.json();
-    console.log(result);
+    // console.log(result);
     return result;
   } catch (e) {
     console.log(e);
-    return "error";
+    return null;
   }
 }
 
@@ -37,11 +37,11 @@ export async function searchGames(query) {
       }),
     });
     const result = await response.json();
-    console.log(result);
+    // console.log(result);
     return result;
   } catch (e) {
     console.log(e);
-    return "error";
+    return null;
   }
 }
 
@@ -56,11 +56,11 @@ export async function getTop() {
       }),
     });
     const result = await response.json();
-    console.log(result);
+    // console.log(result);
     return result;
   } catch (e) {
     console.log(e);
-    return "error";
+    return null;
   }
 }
 
@@ -75,11 +75,11 @@ export async function getUpcoming() {
       }),
     });
     const result = await response.json();
-    console.log(result);
+    // console.log(result);
     return result;
   } catch (e) {
     console.log(e);
-    return "error";
+    return null;
   }
 }
 
@@ -100,11 +100,11 @@ export async function gameDetails(id) {
     // result.cover = await getCover(result.id);
     // let promises = result.artworks.map(async (id) => await getArtwork(id));
     // result.artworks = await Promise.all(promises);
-    console.log(result);
+    // console.log(result);
     return result;
   } catch (e) {
     console.log(e);
-    return "error";
+    return null;
   }
 }
 
@@ -131,7 +131,7 @@ export async function getCover(id) {
     return hash;
   } catch (e) {
     console.log(e);
-    return "error";
+    return null;
   }
 }
 
@@ -158,6 +158,6 @@ export async function getArtwork(id) {
     return hash;
   } catch (e) {
     console.log(e);
-    return "error";
+    return null;
   }
 }
